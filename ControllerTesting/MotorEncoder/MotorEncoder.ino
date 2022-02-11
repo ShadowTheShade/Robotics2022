@@ -35,7 +35,8 @@ void setup() {
 }
 
 void loop() {
-  CrcLib::Update();  motorPWM = map(analogRead(POTENT_TEST_1), 0, 1023, 0, 127);
+  CrcLib::Update();  
+  motorPWM = map(analogRead(POTENT_TEST_1), 0, 1023, 0, 127);
   
   Serial.println(analogRead(POTENT_TEST_1));
 
