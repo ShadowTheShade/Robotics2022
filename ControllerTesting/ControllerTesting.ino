@@ -1,5 +1,7 @@
 #include <CrcLib.h>  //CrcLib program requirement
 
+#include <math.h>
+
 //Rename IOs with a meaningful name (good practice)
 #define BASE_WHEEL_1 CRC_PWM_1 //Variable for the top-left wheel for pwm pin 1(DC motor) on the CrcDuino
 #define BASE_WHEEL_2 CRC_PWM_2 //Variable for the top-right wheel for pwm pin 2(DC motor) on the CrcDuino
@@ -47,8 +49,7 @@ void loop() {
     Serial.print("No remote controller successfully communicates with the CrcDuino"); //This will desplay if the controller is not plugged in, if the CrcConnect is off or if thee remote is not compatible
   }
 }
-  
-  
+
 
 
 
@@ -56,34 +57,34 @@ void loop() {
 void leftJoystick ()
 { //Function for the use of the left side controller joystick
   if (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) < -10 or CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) > 10 or CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) < -10 or CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) > 10)
-  {
-    if (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) > 10 and CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) > 10)
-    {
-      CrcLib::SetPwmOutput(BASE_WHEEL_1, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X)); //
-      CrcLib::SetPwmOutput(BASE_WHEEL_2, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X)); //
-      CrcLib::SetPwmOutput(BASE_WHEEL_3, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X)); //
-      CrcLib::SetPwmOutput(BASE_WHEEL_4, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X)); //127=Full speed
+  { //If the left joystick is not in the relaxed state, it initiates a series of verifications to control the motor speed and direction based on the placement of the joystick
+    if (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) > 10 and 63 > CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) > -63)
+    { //Activates if the left joystick is held in the upwards direction
+      CrcLib::SetPwmOutput(BASE_WHEEL_1, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y))); //Sets the speed and direction of the top-left wheel ( always spinning forwards )
+      CrcLib::SetPwmOutput(BASE_WHEEL_2, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))); 
+      CrcLib::SetPwmOutput(BASE_WHEEL_3, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))); 
+      CrcLib::SetPwmOutput(BASE_WHEEL_4, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))); 
     }
-    else if (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) > 10 and CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) < -10)
-    {
-      CrcLib::SetPwmOutput(BASE_WHEEL_1, (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))); //
-      CrcLib::SetPwmOutput(BASE_WHEEL_2, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X)); //
-      CrcLib::SetPwmOutput(BASE_WHEEL_3, (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))/2); 
-      CrcLib::SetPwmOutput(BASE_WHEEL_4, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));//127=Full speed
+    else if ( 63 > CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) > -63 and CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) > 10)
+    { //Activates if the left joystick is held in the right direction
+      CrcLib::SetPwmOutput(BASE_WHEEL_1, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y))); //
+      CrcLib::SetPwmOutput(BASE_WHEEL_2, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y))); //
+      CrcLib::SetPwmOutput(BASE_WHEEL_3, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y))); 
+      CrcLib::SetPwmOutput(BASE_WHEEL_4, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y))); //127=Full speed
     }
-    else if (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) < -10 and CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) < -10)
-    {
-      CrcLib::SetPwmOutput(BASE_WHEEL_1, (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X)));
-      CrcLib::SetPwmOutput(BASE_WHEEL_2, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
-      CrcLib::SetPwmOutput(BASE_WHEEL_3, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
-      CrcLib::SetPwmOutput(BASE_WHEEL_4, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));//127=Full speed
+    else if (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) < -10 and  63 > CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) > -63)
+    { //Activates if the left joystick is held in the bottom direction
+      CrcLib::SetPwmOutput(BASE_WHEEL_1, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))); //
+      CrcLib::SetPwmOutput(BASE_WHEEL_2, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))); //
+      CrcLib::SetPwmOutput(BASE_WHEEL_3, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))); 
+      CrcLib::SetPwmOutput(BASE_WHEEL_4, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))); //127=Full speed
     }
-    else if (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) < -10 and CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) > 10)
-    {
-      CrcLib::SetPwmOutput(BASE_WHEEL_1, (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X)));
-      CrcLib::SetPwmOutput(BASE_WHEEL_2, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));
-      CrcLib::SetPwmOutput(BASE_WHEEL_3, (CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X))/2);
-      CrcLib::SetPwmOutput(BASE_WHEEL_4, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X));//127=Full speed
+    else if ( 63 > CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) > 63 and CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) < -10)
+    {  //Activates if the left joystick is held in the left direction
+      CrcLib::SetPwmOutput(BASE_WHEEL_1, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y))); //
+      CrcLib::SetPwmOutput(BASE_WHEEL_2, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y))); //
+      CrcLib::SetPwmOutput(BASE_WHEEL_3, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) + CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y))); 
+      CrcLib::SetPwmOutput(BASE_WHEEL_4, fmin(127.0f, CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) - CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y))); //127=Full speed
     }
   }
   
