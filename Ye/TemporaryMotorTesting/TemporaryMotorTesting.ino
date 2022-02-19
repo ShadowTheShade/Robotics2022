@@ -25,14 +25,14 @@ void loop() {
   Serial.print(analogRead(POTENT_TEST_1));
   Serial.print('\n');
   if (analogRead(POTENT_TEST_1) <= 255 ){
-    CrcLib::SetPwmOutput(ELEVATOR_SERVO_5, 127);
-    CrcLib::SetPwmOutput(ELEVATOR_SERVO_6, -127);
-    CrcLib::SetPwmOutput(ELEVATOR_SERVO_7, 127);
+    CrcLib::SetPwmOutput(ELEVATOR_SERVO_5, 120);
+    CrcLib::SetPwmOutput(ELEVATOR_SERVO_6, -120);
+    CrcLib::SetPwmOutput(ELEVATOR_SERVO_7, 120);
   }
   else if (analogRead(POTENT_TEST_1) >= 380 ){
-    CrcLib::SetPwmOutput(ELEVATOR_SERVO_5, -127);
-    CrcLib::SetPwmOutput(ELEVATOR_SERVO_6, 127);
-    CrcLib::SetPwmOutput(ELEVATOR_SERVO_7, -127);
+    CrcLib::SetPwmOutput(ELEVATOR_SERVO_5, -120);
+    CrcLib::SetPwmOutput(ELEVATOR_SERVO_6, 120);
+    CrcLib::SetPwmOutput(ELEVATOR_SERVO_7, -120);
   }
   else {
     CrcLib::SetPwmOutput(ELEVATOR_SERVO_5, -10);
