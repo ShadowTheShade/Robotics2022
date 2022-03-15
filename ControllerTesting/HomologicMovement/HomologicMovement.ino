@@ -2,7 +2,6 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
-
 //Rename IOs with a meaningful name (good practice)
 #define BASE_WHEEL_1 CRC_PWM_1 //Variable for the top-left wheel for pwm pin 1(DC motor) on the CrcDuino
 #define BASE_WHEEL_2 CRC_PWM_2 //Variable for the top-right wheel for pwm pin 2(DC motor) on the CrcDuino
@@ -14,7 +13,8 @@
 #define SET_DIGPIN_3 CRC_DIG_3 //Variable for digital pin 3 on the CrcDuino
 #define SET_DIGPIN_4 CRC_DIG_4 //Variable for digital pin 4 on the CrcDuino
 
-using namespace Crc; //CrcLib program requirement
+namespace Crc{ //CrcLib program requirement
+
 void checkController();
 void MoveHomologic();
 //**************************************************************************************************************************
@@ -71,4 +71,5 @@ void moveHomologic()
     BASE_WHEEL_2, //Top-right wheel
     BASE_WHEEL_3 //Bottom-right wheel
   ); //Maps the controller to produce omni wheel movement basd on two joysticks
+}
 }
