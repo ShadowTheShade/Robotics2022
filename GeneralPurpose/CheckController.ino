@@ -56,6 +56,6 @@ void checkController()
 
   else
   { //Will display on the serial monitor for a no connection situation
-    Serial.print("No remote controller successfully communicates with the CrcDuino"); //This will desplay if the controller is not plugged in, if the CrcConnect is off or if thee remote is not compatible
+    Serial.println("No remote controller successfully communicates with the CrcDuino"); //This will desplay if the controller is not plugged in, if the CrcConnect is off or if thee remote is not compatible
   }
 }
