@@ -1,6 +1,6 @@
 #include <Adafruit_NeoPixel.h>
 // Which pin on the Arduino is connected to the NeoPixels?
-#define PIN        4 // On Trinket or Gemma, suggest changing this to 1
+#define PIN        1 // On Trinket or Gemma, suggest changing this to 1
 
 // How many NeoPixels are attached to the Arduino?
 #define NUMPIXELS 300 // Popular NeoPixel ring size
@@ -13,7 +13,7 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 #define DELAYVAL 500 // Time (in milliseconds) to pause between pixels
 
-int myPin = 0;
+int myPin = 3;
 bool stateValue = false;
 int prevState;
 void setup() {
@@ -28,7 +28,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-    int sensorValue = analogRead(myPin);
+    float sensorValue = analogRead(myPin);
     Serial.println(sensorValue);
     if (sensorValue > 140){
       
