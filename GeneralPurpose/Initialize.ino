@@ -1,6 +1,8 @@
 void initialize() {
   CrcLib::Initialize(); //Sets up the CrcDuino
+#ifdef __SERIAL_DEBUG
   Serial.begin(2000000); //Initializes the serial monitor bandwith (higher number == higher frequency)
+#endif
   CrcLib::InitializePwmOutput(BASE_WHEEL_1); //Sets the pwm pin used for the top-left wheel as an output
   CrcLib::InitializePwmOutput(BASE_WHEEL_2); //Sets the pwm pin used for the top-right wheel as an output
   CrcLib::InitializePwmOutput(BASE_WHEEL_3); //Sets the pwm pin used for the bottom-right wheel as an output
