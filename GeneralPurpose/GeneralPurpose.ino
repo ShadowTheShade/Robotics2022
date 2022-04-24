@@ -1,6 +1,6 @@
 #include <CrcLib.h>
 
-#define __SERIAL_DEBUG
+// #define __SERIAL_DEBUG
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
@@ -36,7 +36,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   CrcLib::Update(); //Refreshes the CrcDuino
 #ifdef __SERIAL_DEBUG
-//  checkController(); //Displays whether or not the controller is connected to the arduino and displays its values
+  checkController(); //Displays whether or not the controller is connected to the arduino and displays its values
 #endif
   moveHolonomic();
   elevatorMovement();
