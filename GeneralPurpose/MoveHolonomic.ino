@@ -9,9 +9,9 @@ void moveHolonomic()
 { //Built-in Crc function to command the movement of a base with 4 omni-wheels
 
   CrcLib::MoveHolonomic(
-    scaleNum(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) - 10), //Adjusted to the controller left joystick drift
-    scaleNum(-CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + 6), //Adjusted to the controller left joystick drift
-    scaleNum(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK2_X) - 8), 
+    scaleNum(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X)), //Adjusted to the controller left joystick drift
+    scaleNum(-CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y)), //Adjusted to the controller left joystick drift
+    scaleNum(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK2_X)), 
 //    CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X), //Adjusted to the controller left joystick drift
 //    -CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y), //Adjusted to the controller left joystick drift
 //    CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK2_X), 
@@ -43,9 +43,9 @@ T clamp_lerp_range(F f, F x, F y, T a, T b) {
 }
 
 int scaleNum(int num){
-  auto f = lerp_range<int, double>(pow(lerp_range<double, double>(num, in_min, in_max, -1.0, 1.0), 3), out_min, out_max);
-  Serial.print(num);
-  Serial.print(" -> ");
-  Serial.println(f);
-  return f;
+  auto f = lerp_range<double, double>(num, in_min, in_max, 0.0, 1.0);
+  if (f < .2)
+    return out_min;
+  else
+    return lerp<int, double>(pow(f, 3), out_min, out_max);
 }
