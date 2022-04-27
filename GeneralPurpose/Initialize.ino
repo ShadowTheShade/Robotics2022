@@ -11,6 +11,8 @@ void initialize() {
   CrcLib::InitializePwmOutput(ELEVATOR_2); //Sets the pwm pin used for the top-right elevator servo as an output
   CrcLib::InitializePwmOutput(ELEVATOR_3); //Sets the pwm pin used for the bottom-right elevator servo as an output
   CrcLib::InitializePwmOutput(ELEVATOR_4); //Sets the pwm pin used for the bottom-right elevator servo as an output
+  CrcLib::InitializePwmOutput(PICKUP_1); //Sets the pwm pin used for the pickup motor as an output
+  CrcLib::InitializePwmOutput(DROPOFF_1); //Sets the pwm pin used for the dropoff servo as an output
   CrcLib::SetDigitalPinMode(SET_DIGPIN_1, OUTPUT); //Set the digital pin used for the top-left wheel as an output
   CrcLib::SetDigitalPinMode(SET_DIGPIN_2, OUTPUT); //Set the digital pin used for the top-right wheel as an output
   CrcLib::SetDigitalPinMode(SET_DIGPIN_3, OUTPUT); //Set the digital pin used for the bottom-right wheel as an output

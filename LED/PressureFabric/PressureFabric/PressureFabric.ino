@@ -1,6 +1,6 @@
-#include <Adafruit_NeoPixel.h>
+#include <FastLED.h>
 // Which pin on the Arduino is connected to the NeoPixels?
-#define PIN        1 // On Trinket or Gemma, suggest changing this to 1
+#define PIN        9 // On Trinket or Gemma, suggest changing this to 1
 
 // How many NeoPixels are attached to the Arduino?
 #define NUMPIXELS 300 // Popular NeoPixel ring size
@@ -9,64 +9,116 @@
 // and which pin to use to send signals. Note that for older NeoPixel
 // strips you might need to change the third parameter -- see the
 // strandtest example for more information on possible values.
-Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-#define DELAYVAL 500 // Time (in milliseconds) to pause between pixels
-
+CRGB leds[NUMPIXELS];
+int sensorValueInit = 200;
 int myPin = 3;
 bool stateValue = false;
-int prevState;
+int sensorValue = 0; 
+bool INIT = true;
+
+enum STATE { STANDBY, BLUE, ORANGE };
+int state = STANDBY;
+
+const int D = 2;
+bool guard[D];
+
+bool guard_not_done(void) {
+  for (int i = 0; i < D; i++) if (!guard[i]) return true;
+  return false;
+}
+void tick_change_signal(void) {
+  for (int i = 0; i < D; i++)
+    if (!guard[i]) {
+      guard[i] = true;
+      return;
+    }
+}
+void reset_guard() {
+  for (int i = 0; i < D; i++) guard[i] = false;
+}
+
+void set_to_blue() {
+    for(int i=0; i<NUMPIXELS; i++){
+      leds[i] = CHSV(140, 230, 255);
+    }
+      if (state != STATE::BLUE) {
+        FastLED.show();
+        state = STATE::BLUE;
+      }
+    Serial.println("SET TO BLUE");
+}
+
+void set_to_orange() {
+  Serial.print("yo");
+      for(int i=0; i<NUMPIXELS; i++){
+        leds[i] = CHSV(40 , 200, 255);
+      }
+      if (state != STATE::ORANGE) {
+        FastLED.show();
+        state = STATE::ORANGE;
+      }
+    Serial.println("SET TO ORANGE");
+}
+
+bool need_to_go_blue(const int& x) {
+  Serial.print(x);
+  Serial.print(" | ");
+  Serial.println(sensorValueInit - 2);
+  return x >= (sensorValueInit - 2);
+}
+
+bool need_to_go_orange(const int& x) {
+  return !need_to_go_blue(x);  
+}
+
 void setup() {
-  // put your setup code here, to run once:
+  pinMode(myPin, INPUT);
+  FastLED.addLeds<NEOPIXEL, PIN>(leds, NUMPIXELS);
   Serial.begin(9600);
-
-  // END of Trinket-specific code.
-
-  pixels.begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
-  
+  reset_guard();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-    float sensorValue = analogRead(myPin);
+  if (millis() > 5000 && INIT){
+    Serial.print("HIT: ");
     Serial.println(sensorValue);
-    if (sensorValue > 140){
-      
-  
-  if (prevState == 141){
-    stateValue = false;
+    sensorValueInit = analogRead(myPin);
+    INIT = false;
   }
-  prevState = 140;
-  if (stateValue == false){
-    for(int i=0; i<NUMPIXELS; i++) { // For each pixel...
-
-    // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
-    // Here we're using a moderately bright green color:
-    pixels.setPixelColor(i, pixels.Color(255, 100, 0));
-    
-       // Send the updated pixel colors to the hardware.
-    stateValue = true;
-  }
-    pixels.show();
-  }
+   else if (INIT == true){ 
+    sensorValue = analogRead(myPin);
+    Serial.println(sensorValue);
+    return; 
     }
-  else {
-  if (prevState == 140){
-    stateValue = false;
-  }
-  prevState = 141;
-  if (stateValue == false){
-    for(int i=0; i<NUMPIXELS; i++) { // For each pixel...
-
-    // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
-    // Here we're using a moderately bright green color:
-    pixels.setPixelColor(i, pixels.Color(255, 0, 0));
-    
-       // Send the updated pixel colors to the hardware.
-    stateValue = true;
-  }
-    pixels.show();
-  }
-  }
   
+    sensorValue = analogRead(myPin);
+    Serial.print(state);
+    Serial.print(": ");
+    Serial.print(sensorValue);
+    Serial.print(": ");
+    Serial.println(sensorValueInit);
+    if (need_to_go_blue(sensorValue)){
+      set_to_blue();
+      while (guard_not_done()) {
+        if (need_to_go_orange(analogRead(myPin))){
+          tick_change_signal();
+        }
+        else{
+          reset_guard();
+        }
+      }
+    }
+    else if (need_to_go_orange(sensorValue)) {
+      set_to_orange();
+      Serial.println("!!!");
+      while (guard_not_done()) {
+        if (need_to_go_blue(analogRead(myPin))){
+          tick_change_signal();
+        }
+        else
+          reset_guard();
+      }
+    }
+    reset_guard();
 }

@@ -27,7 +27,9 @@ void initialize();
 void checkController();
 void moveHolonomic();
 void elevatorMovement();
-
+unsigned long currentTime;
+const unsigned long eventInterval = 700;
+unsigned long previousTime;
 //**************************************************************************************************************************
 void setup() {
   initialize();
@@ -37,6 +39,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   CrcLib::Update(); //Refreshes the CrcDuino
+  currentTime = millis();
 #ifdef __SERIAL_DEBUG
   checkController(); //Displays whether or not the controller is connected to the arduino and displays its values
 #endif
