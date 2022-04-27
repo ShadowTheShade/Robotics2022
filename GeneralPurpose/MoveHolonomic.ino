@@ -10,8 +10,8 @@ void moveHolonomic()
     scaleNum(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_X) - 10), //Adjusted to the controller left joystick drift
     scaleNum(-(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK1_Y) + 7)), //Adjusted to the controller left joystick drift
     scaleNum(CrcLib::ReadAnalogChannel(ANALOG::JOYSTICK2_X) - 8), 
-    BASE_WHEEL_1, //Top-left wheel
-    BASE_WHEEL_4, //Bottom-left wheel
+    BASE_WHEEL_4, //Bottom-left wheel, 2 => 1
+    BASE_WHEEL_1, //Top-left wheel, 1 => 2
     BASE_WHEEL_2, //Top-right wheel
     BASE_WHEEL_3 //Bottom-right wheel
   ); //Maps the controller to produce omni wheel movement basd on two joysticks
@@ -38,15 +38,5 @@ T clamp_lerp_range(F f, F x, F y, T a, T b) {
 }
 
 int scaleNum(int num){
-  return lerp_range<double, double>(pow(clamp_lerp_range<double, double>(num, in_min, in_max, -1.0, 1.0), 3), -1.0, 1.0, out_min, out_max);
+  return SGN(num)*lerp_range<double, double>(pow(clamp_lerp_range<double, double>(num, in_min, in_max, -1.0, 1.0), 2), -1.0, 1.0, out_min, out_max);
 }
-/*
-int scaleNum(int num){
-  auto f = lerp_range<double, double>(num, in_min, in_max, 0.0, 1.0);
-  if (f < .2)
-    return out_min;
-  else
-    return lerp<int, double>(pow(f, 3), out_min, out_max);
-}
-
-*/

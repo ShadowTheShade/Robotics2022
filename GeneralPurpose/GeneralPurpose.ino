@@ -4,6 +4,7 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
+#define SGN(x) ((x) < 0 ? -1 : ((x) > 0 ? 1 : 0))
 
 //Rename IOs with a meaningful name (good practice)
 #define BASE_WHEEL_1 CRC_PWM_1 //Variable for the top-left wheel for pwm pin 1(DC motor) on the CrcDuino
