@@ -16,7 +16,7 @@ void setup() {
 }
 
 double f(double t, double pos) {
-  return max(.2, sin(PI * (pos - t / 20.0))) * 255;
+  return max(.5, sin(PI * (pos - t / 20.0))) * 255;
 }
 
 void loop() {

@@ -29,7 +29,8 @@ void checkController();
 void moveHolonomic();
 void elevatorMovement();
 unsigned long currentTime;
-const unsigned long eventInterval = 700;
+const unsigned long eventInterval = 350;
+const unsigned long pickupInterval = 300;
 unsigned long previousTime;
 //**************************************************************************************************************************
 void setup() {
