@@ -43,4 +43,13 @@ void balls ()
        CrcLib::SetPwmOutput(DROPOFF_1, 0);
     }
   }
+  if(CrcLib::ReadDigitalChannel(BUTTON::ARROW_UP) == 1){
+    CrcLib::SetPwmOutput(SUSPICIOUS_ADDITION_1, 90); //
+  }
+  else if(CrcLib::ReadDigitalChannel(BUTTON::ARROW_DOWN) == 1){
+    CrcLib::SetPwmOutput(SUSPICIOUS_ADDITION_1, -90); //
+  }
+  else if (CrcLib::ReadDigitalChannel(BUTTON::ARROW_LEFT) == 1){
+    CrcLib::SetPwmOutput(SUSPICIOUS_ADDITION_1, 0); //
+  }
 }

@@ -4,7 +4,7 @@
 #define NUM_LEDS 300
 
 #define CHECK_1 4
-#define CHECK_2 12
+#define CHECK_2 7
 #define BLUE_PIN 3
 // #define ORANGE_PIN 5
 

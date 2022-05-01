@@ -15,13 +15,14 @@
 #define ELEVATOR_2 CRC_PWM_6 //Variable for pwm pin 6(servo) on the CrcDuino
 #define ELEVATOR_3 CRC_PWM_7 //Variable for pwm pin 7(servo) on the CrcDuino
 #define ELEVATOR_4 CRC_PWM_8 //Variable for pwm pin 8(servo) on the CrcDuino
-#define PICKUP_1 CRC_PWM_9 //Variable for pwm pin 8(servo) on the CrcDuino
-#define DROPOFF_1 CRC_PWM_10 //Variable for pwm pin 8(servo) on the CrcDuino
+#define PICKUP_1 CRC_PWM_9 //Variable for pwm pin 9(servo) on the CrcDuino
+#define DROPOFF_1 CRC_PWM_10 //Variable for pwm pin 10(servo) on the CrcDuino
+#define SUSPICIOUS_ADDITION_1 CRC_PWM_11
 #define SET_DIGPIN_1 CRC_DIG_1 //Variable for digital pin 1 on the CrcDuino
 #define SET_DIGPIN_2 CRC_DIG_2 //Variable for digital pin 2 on the CrcDuino
 #define SET_DIGPIN_3 CRC_DIG_3 //Variable for digital pin 3 on the CrcDuino
 #define SET_DIGPIN_4 CRC_DIG_4 //Variable for digital pin 4 on the CrcDuino
-  
+ 
 using namespace Crc;
 
 void initialize();
